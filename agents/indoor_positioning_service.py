@@ -79,11 +79,9 @@ class indoor_positioning_service(object):
     """ Agent Services """
 
     def human_position_estimate(self, args, result_recipient):
-        x = 3 * 4
-        x = x * x
-        user_str = args[0] + ',' + str(x)
+        loc = "Living Room"
         time.sleep(3)
-        self.belief_manager.send_to_agent(result_recipient, 'user_location', user_str, self.agent_id)
+        self.belief_manager.send_to_agent(result_recipient, 'user_location', loc, self.agent_id)
 
     """ Agent Plans """
 

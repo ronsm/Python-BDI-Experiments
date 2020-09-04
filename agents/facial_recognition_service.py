@@ -69,7 +69,7 @@ class facial_recognition_service(object):
 
     def service_request(self, service, args, result_recipient):
         method = getattr(self, service)
-        t = threading.Thread(target =  method, args = (args))
+        t = threading.Thread(target =  method, args = (args, result_recipient))
         t.start()
 
     def log(self, msg):
@@ -79,7 +79,11 @@ class facial_recognition_service(object):
     """ Agent Services """
 
     # service methods
-    # none
+    def recognise_face(self, args, result_recipient):
+        image_URL = args[0]
+        person = "james"
+        time.sleep(2)
+        self.belief_manager.send_to_agent(result_recipient, 'person_in_image', person, self.agent_id)
 
     """ Agent Plans """
 

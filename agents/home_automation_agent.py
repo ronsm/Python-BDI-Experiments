@@ -69,7 +69,7 @@ class home_automation_agent(object):
 
     def service_request(self, service, args, result_recipient):
         method = getattr(self, service)
-        t = threading.Thread(target =  method, args = (args))
+        t = threading.Thread(target =  method, args = (args, result_recipient))
         t.start()
 
     def log(self, msg):
@@ -89,10 +89,24 @@ class home_automation_agent(object):
         log_msg = 'plan start: handle_doorbell_pressed_event'
         self.log(log_msg)
 
+        # gets the URL of the image output by the doorbell
         doorbell_image = self.wait_for_belief('doorbell_image')
 
-        log_msg = 'doorbell_image: ' + doorbell_image
-        self.log(log_msg)
+        self.log(doorbell_image)
+
+        # find and call a face recognition service
+        instance = self.service_manager.search_service('recognise_face')
+        instance.service_request('recognise_face', [doorbell_image], self.agent_id)
+        person_in_image = self.wait_for_belief('person_in_image')
+
+        self.log(person_in_image)
+
+        # find and call a service to locate the user
+        instance = self.service_manager.search_service('human_position_estimate')
+        instance.service_request('human_position_estimate', [self.belief_manager.get_belief_value(self.agent_id, 'user')], self.agent_id)
+        user_location = self.wait_for_belief('user_location')
+
+        self.log(user_location)
 
         log_msg = 'plan end: handle_doorbell_pressed_event'
         self.log(log_msg)

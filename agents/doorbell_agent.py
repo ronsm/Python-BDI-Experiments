@@ -69,7 +69,7 @@ class doorbell_agent(object):
 
     def service_request(self, service, args, result_recipient):
         method = getattr(self, service)
-        t = threading.Thread(target =  method, args = (args))
+        t = threading.Thread(target =  method, args = (args, result_recipient))
         t.start()
 
     def log(self, msg):
