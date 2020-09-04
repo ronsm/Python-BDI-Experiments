@@ -1,5 +1,7 @@
 # Python BDI Experiments
 
+This repository contains some code implementing a simple BDI framework in Python, with a built-in example scenario. The sample scenario will not be able to run to completion without the corresponding ROS packages and ROS Bridge software, which is not published here.
+
 ## How to Run
 
 1. Clone this repository: ```git clone https://github.com/ronsm/Python-BDI-Experiments.git```
