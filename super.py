@@ -3,6 +3,7 @@ from os.path import isfile, join
 import importlib
 from service_manager import service_manager
 from belief_manager import belief_manager
+from ros_bridge_client import ros_bridge_client
 import colorama
 from colorama import Fore, Style
 
@@ -14,6 +15,7 @@ class super(object):
 
         self.service_manager = service_manager()
         self.belief_manager = belief_manager()
+        self.ros_bridge_client = ros_bridge_client(self.belief_manager)
 
         self.agent_instances = {}
 
@@ -28,7 +30,7 @@ class super(object):
             path = 'agents.' + agent_class_name
             module = importlib.import_module(path)
             agent_class = getattr(module, agent_class_name)
-            agent_instance = agent_class(self.service_manager, self.belief_manager)
+            agent_instance = agent_class(self.service_manager, self.belief_manager, self.ros_bridge_client)
 
             self.agent_instances[agent_class_name] = agent_instance
             self.belief_manager.enrol_agent(agent_class_name)

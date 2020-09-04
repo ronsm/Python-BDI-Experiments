@@ -4,7 +4,7 @@ import threading
 import time
 
 class doorbell_agent(object):
-    def __init__(self, service_manager, belief_manager):
+    def __init__(self, service_manager, belief_manager, ros_bridge_client):
         """
         IMPORTANT: Configuration
 
@@ -22,6 +22,8 @@ class doorbell_agent(object):
         self.service_manager.enrol_agent(self.agent_id)
         
         self.belief_manager = belief_manager
+
+        self.ros_bridge_client = ros_bridge_client
 
         self.trigger_sets = {}
 

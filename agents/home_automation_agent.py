@@ -4,7 +4,7 @@ import threading
 import time
 
 class home_automation_agent(object):
-    def __init__(self, service_manager, belief_manager):
+    def __init__(self, service_manager, belief_manager, ros_bridge_client):
         """
         IMPORTANT: Configuration
 
@@ -22,6 +22,8 @@ class home_automation_agent(object):
         self.service_manager.enrol_agent(self.agent_id)
         
         self.belief_manager = belief_manager
+
+        self.ros_bridge_client = ros_bridge_client
 
         self.trigger_sets = {}
 
@@ -107,6 +109,17 @@ class home_automation_agent(object):
         user_location = self.wait_for_belief('user_location')
 
         self.log(user_location)
+
+        # make string for next service call
+        say_text = 'Your friend ' + person_in_image + ' is at the door!'
+
+        # find and call a service to navigate to and inform the user
+        instance = self.service_manager.search_service('inform_user_with_image')
+        instance.service_request('inform_user_with_image', [user_location, doorbell_image, say_text], self.agent_id)
+        status = self.wait_for_belief('inform_user_with_image')
+
+        self.log(str(status))
+        self.belief_manager.print_all_agent_beliefs()
 
         log_msg = 'plan end: handle_doorbell_pressed_event'
         self.log(log_msg)

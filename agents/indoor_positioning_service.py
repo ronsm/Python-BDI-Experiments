@@ -4,7 +4,7 @@ import threading
 import time
 
 class indoor_positioning_service(object):
-    def __init__(self, service_manager, belief_manager):
+    def __init__(self, service_manager, belief_manager, ros_bridge_client):
         """
         IMPORTANT: Configuration
 
@@ -22,6 +22,8 @@ class indoor_positioning_service(object):
         self.service_manager.enrol_agent(self.agent_id)
 
         self.belief_manager = belief_manager
+
+        self.ros_bridge_client = ros_bridge_client
         
         self.trigger_sets = {}
 
@@ -79,7 +81,7 @@ class indoor_positioning_service(object):
     """ Agent Services """
 
     def human_position_estimate(self, args, result_recipient):
-        loc = "Living Room"
+        loc = "livingRoom"
         time.sleep(3)
         self.belief_manager.send_to_agent(result_recipient, 'user_location', loc, self.agent_id)
 

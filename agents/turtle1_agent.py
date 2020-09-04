@@ -3,7 +3,7 @@ from colorama import Fore, Style
 import threading
 import time
 
-class facial_recognition_service(object):
+class turtle1_agent(object):
     def __init__(self, service_manager, belief_manager, ros_bridge_client):
         """
         IMPORTANT: Configuration
@@ -15,7 +15,7 @@ class facial_recognition_service(object):
         """
 
         # the agent identifier
-        self.agent_id = 'facial_recognition_service'
+        self.agent_id = 'turtle1_agent'
         self.log('init')
 
         self.service_manager = service_manager
@@ -28,7 +28,7 @@ class facial_recognition_service(object):
         self.trigger_sets = {}
 
         # register services here
-        self.service_manager.register_service(self.agent_id, 'recognise_face')
+        self.service_manager.register_service(self.agent_id, 'inform_user_with_image')
         
         # add trigger sets to the dictionary here
         # none
@@ -81,11 +81,10 @@ class facial_recognition_service(object):
     """ Agent Services """
 
     # service methods
-    def recognise_face(self, args, result_recipient):
-        image_URL = args[0]
-        person = "james"
-        time.sleep(2)
-        self.belief_manager.send_to_agent(result_recipient, 'person_in_image', person, self.agent_id)
+    def inform_user_with_image(self, args, result_recipient):
+        self.ros_bridge_client.send('turtle1', 'inform_user_with_image', [args[0], args[1], args[2]], self.agent_id)
+        result = self.wait_for_belief('inform_user_with_image')
+        self.belief_manager.send_to_agent(result_recipient, 'inform_user_with_image', result, self.agent_id)
 
     """ Agent Plans """
 
